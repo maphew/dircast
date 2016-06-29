@@ -21,6 +21,7 @@ def generate_feed(channel_dict, file_metadatas):
     fg.link(href=channel_dict["url"], rel="self")
     fg.title(channel_dict["title"])
     fg.description(channel_dict["description"])
+    fg.image("{}/{}".format(channel_dict["url"], channel_dict["artwork"]))
 
     try:
         category = channel_dict["category"]
@@ -30,8 +31,6 @@ def generate_feed(channel_dict, file_metadatas):
         subcategory = channel_dict["subcategory"]
     except KeyError:
         subcategory = None
-    fg.podcast.itunes_category(category, subcategory)
-
     try:
         image = channel_dict["itunes_image"]
     except KeyError:
@@ -45,6 +44,7 @@ def generate_feed(channel_dict, file_metadatas):
     except KeyError:
         owner_email = None
 
+    fg.podcast.itunes_category(category, subcategory)
     fg.podcast.itunes_image(image)
     fg.podcast.itunes_owner(owner, owner_email)
 
