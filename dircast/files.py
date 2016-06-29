@@ -7,6 +7,7 @@ import magic
 import yaml
 import mutagen
 
+from posixpath import join as urljoin
 
 AUDIO_MIMETYPES = {"audio/mpeg", "audio/mp4", "video/mp4"}
 
@@ -55,10 +56,8 @@ def get_file_metadata(channel_url, mimetype, path):
     md = FileMetadata(
         id=hashlib.sha1(title.encode()).hexdigest(),
         title=title,
-        link="".join([
-            channel_url,
-            str(path.relative_to(path, path.parents[0])),
-        ]),
+        link=urljoin(channel_url,
+            str(path.relative_to(path, path.parents[0]))),
         mimetype=mimetype
     )
     md.length = path.stat().st_size
@@ -67,6 +66,7 @@ def get_file_metadata(channel_url, mimetype, path):
 
 
 def find_files(channel_url, path):
+    path = path.resolve()
     files = []
     for child in sorted(path.iterdir()):
         getLogger(__name__).info("checking %s", child)
