@@ -32,6 +32,22 @@ def generate_feed(channel_dict, file_metadatas):
         subcategory = None
     fg.podcast.itunes_category(category, subcategory)
 
+    try:
+        image = channel_dict["itunes_image"]
+    except KeyError:
+        image = None
+    try:
+        owner = channel_dict["itunes_owner"]
+    except KeyError:
+        owner = None
+    try:
+        owner_email = channel_dict["itunes_email"]
+    except KeyError:
+        owner_email = None
+
+    fg.podcast.itunes_image(image)
+    fg.podcast.itunes_owner(owner, owner_email)
+
     for file_metadata in file_metadatas:
         add_entry(fg, file_metadata)
 
